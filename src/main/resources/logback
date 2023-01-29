@@ -1,6 +1,6 @@
 <configuration>
 
-    <property name="HOME_LOG" value="/var/log/com.example/SpringDemoBot/app.log"/> // faf
+    <property name="HOME_LOG" value="/var/log/com.example/SpringDemoBot/app.log"/>
 
     <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${HOME_LOG}</file>
