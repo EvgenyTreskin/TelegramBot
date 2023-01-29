@@ -15,7 +15,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     public TelegramBot(BotConfig config) {
         this.config = config;
     }
-
+    // dsg
     @Override
     public String getBotUsername() {
         return config.getBotName();
