@@ -15,7 +15,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String userName;
-    private Timestamp registredAt;
+    private Timestamp registeredAt;
 
     public Long getChatId() {
         return chatId;
@@ -49,11 +49,22 @@ public class User {
         this.userName = userName;
     }
 
-    public Timestamp getRegistredAt() {
-        return registredAt;
+    public Timestamp getRegisteredAt() {
+        return registeredAt;
     }
 
-    public void setRegistredAt(Timestamp registredAt) {
-        this.registredAt = registredAt;
+    public void setRegisteredAt(Timestamp registeredAt) {
+        this.registeredAt = registeredAt;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "chatId=" + chatId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", userName='" + userName + '\'' +
+                ", registeredAt=" + registeredAt +
+                '}';
     }
 }
