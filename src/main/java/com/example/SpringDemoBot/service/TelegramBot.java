@@ -32,20 +32,11 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Autowired
     private UserRepository userRepository;
     final BotConfig config;
-    static final String HELP_TEXT = """
-            This bot is created to demonstrate Spring capabilities.
-
-            You can execute commands from the main menu on the left or by typing a command:
-
-            Type /start to see a welcome massage
-
-            Type /mydata to see the data stored about yourself
-                        
-            Type /help to see this massage again
-                        
-                        
-
-            """;
+    static final String HELP_TEXT = "This bot is created to demonstrate Spring capabilities.\n\n" +
+                                    "You can execute commands from the main menu on the left or by typing a command:\n\n" +
+                                    "Type /start to see a welcome massage\n\n" +
+                                    "Type /mydata to see the data stored about yourself\n\n" +
+                                    "Type /help to see this massage again\n\n";
 
 
     public TelegramBot(BotConfig config) {
@@ -78,6 +69,15 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
+
+            if (chatId == config.getOwnerId() && messageText.contains("/send")) {
+                var textToSend = EmojiParser.parseToUnicode(messageText.substring(messageText.indexOf(" ")));
+                var users = userRepository.findAll();
+                for (User user : users) {
+                    sendMessage(user.getChatId(), textToSend);
+                }
+            }
+
             switch (messageText) {
                 case "/start":
                     registerUser(update.getMessage());
@@ -93,17 +93,17 @@ public class TelegramBot extends TelegramLongPollingBot {
                     sendMessage(chatId, "Sorry, command was not recognized");
 
             }
-        } else if (update.hasCallbackQuery()){
+        } else if (update.hasCallbackQuery()) {
             String callbackData = update.getCallbackQuery().getData();
             long messageId = update.getCallbackQuery().getMessage().getMessageId();
             long chatId = update.getCallbackQuery().getMessage().getChatId();
 
-            if (callbackData.equals("YES_BUTTON")){
+            if (callbackData.equals("YES_BUTTON")) {
                 String text = "You pressed YES button";
                 EditMessageText message = new EditMessageText();
                 message.setChatId(String.valueOf(chatId));
                 message.setText(text);
-                message.setMessageId((int)messageId);
+                message.setMessageId((int) messageId);
 
                 try {
                     execute(message);
@@ -111,12 +111,12 @@ public class TelegramBot extends TelegramLongPollingBot {
                     log.error("Error occurred :" + e.getMessage());
                 }
 
-            } else if (callbackData.equals("NO_BUTTON")){
+            } else if (callbackData.equals("NO_BUTTON")) {
                 String text = "You pressed NO button";
                 EditMessageText message = new EditMessageText();
                 message.setChatId(String.valueOf(chatId));
                 message.setText(text);
-                message.setMessageId((int)messageId);
+                message.setMessageId((int) messageId);
 
                 try {
                     execute(message);
